@@ -1,19 +1,15 @@
 #ifndef WALLET_HPP
 #define WALLET_HPP
+#include <QCryptographicHash>
+#include <QString>
+#include <QFile>
+#include <QByteArray>
+#include <util/libunity.h>
 
-#include <qt5/QtCore/QCryptographicHash>
-#include <qt5/QtCore/QString>
-#include <qt5/QtCore/QFile>
-#include <qt5/QtCore/QByteArray>
-#include <libunity.h>
-#include "json.hpp"
 namespace cute {
 
-using Json = nlohmann::json;
 const QString wallet_filename="ripple.key";
-
 class Wallet{
-
 public:
     bool isLocked{true};
     bool isEmpty{true};
