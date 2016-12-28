@@ -1,0 +1,20 @@
+project(ripple-qt)
+cmake_minimum_required(VERSION 3.1)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_CXX_STANDARD 14)
+find_package(Qt5Widgets)
+find_package(Qt5Qml)
+add_subdirectory(libs)
+get_property(RIPPLED_INCLUDE_DIRECTORIES TARGET rippled PROPERTY INCLUDE_DIRECTORIES)
+get_property(CRYPTOPP_INCLUDE_DIRECTORIES TARGET cryptopp PROPERTY INCLUDE_DIRECTORIES)
+INCLUDE_DIRECTORIES(${RIPPLED_INCLUDE_DIRECTORIES} ${CRYPTOPP_INCLUDE_DIRECTORIES})
+
+INCLUDE_DIRECTORIES(./src)
+AUX_SOURCE_DIRECTORY(./src RIPPLE_QT_SRC_LIST)
+AUX_SOURCE_DIRECTORY(./src/util RIPPLE_QT_SRC_LIST)
+add_executable(${PROJECT_NAME}  ${RIPPLE_QT_SRC_LIST} ./src/gui/qml.qrc)
+target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::Qml cryptopp rippled)
+
+

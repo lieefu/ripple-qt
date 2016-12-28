@@ -1,0 +1,7 @@
+[submodule "libs/rippled"]
+	path = libs/rippled
+	url = git@github.com:lieefu/rippled.git
+	branch = lib
+[submodule "libs/cryptopp"]
+	path = libs/cryptopp
+	url = git@github.com:lieefu/cryptopp.git
