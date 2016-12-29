@@ -15,26 +15,8 @@ int main(int argc, char *argv[])
 {
     std::string password="abc123";
        cute::Wallet wallet;
-       std::string jsonstr=R"({
-                      "flag": false,
-                      "keys": [
-                          {
-                              "account": "rDoxWHE1usiA4FxBhSN463LZ7oLPK6b7Hw",
-                              "memo": "test memo",
-                              "name": "roboter",
-                              "secret": ""
-                          },
-                          {
-                              "account": "rUZt6cD3ZN6iWat1q3Z6B4YmkPBEa88vYE",
-                              "memo": "这里是汉字注释说明内容",
-                              "name": "ruibopay",
-                              "secret": ""
-                          }
-                      ],
-                      "version": "1.0"
-                  })";
-//           if(wallet.isEmpty){
-//               if(wallet.setJsonData(jsonstr)){
+//          if(wallet.isError){
+//               if(wallet.setJsonData(cute::wallet_profile)){
 //                   std::cout<<wallet.getJsonData()<<std::endl;
 //                   wallet.encrypt(password);
 //                   wallet.save();
@@ -43,11 +25,16 @@ int main(int argc, char *argv[])
 //               }
 //           }
 
-           std::cout<<"isEmpty:"<<wallet.isEmpty<<"isLocked："<<wallet.isLocked<<std::endl;
-
-           if(!wallet.isEmpty&&wallet.isLocked){
+           std::cout<<"isError:"<<wallet.isError<<"isEmpty:"<<wallet.isEmpty<<"isLocked："<<wallet.isLocked<<std::endl;
+           if(wallet.isOK()&&!wallet.isLocked){
+               std::cout<<wallet.getJsonData(4)<<std::endl;
+               wallet.encrypt(password);
+               std::cout<<"encrypt after,isEmpty:"<<wallet.isEmpty<<"isLocked："<<wallet.isLocked<<std::endl;
+           }
+           if(wallet.isOK()&&wallet.isLocked){
                wallet.decrypt(password);
                std::cout<<"decrypt after,isEmpty:"<<wallet.isEmpty<<"isLocked："<<wallet.isLocked<<std::endl;
+               wallet.setKeyPass("paypassword");
                std::cout<<wallet.getJsonData(4);
            }
 //    std::cout << __cplusplus << (__cplusplus >201103L)  <<std::endl;
