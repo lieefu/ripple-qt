@@ -90,7 +90,7 @@ bool Wallet::setKeyPass(const std::string &password){
     if(isLocked) return false;
     Json account_jsondata=wallet_jsondata["account"];
     if(account_jsondata["lock"]) return false;
-    std::string keyText=account_jsondata["key"].dump();
+    std::string keyText=account_jsondata["key"];
     //std::string plainText=wallet_jsondata.dump();
     if(keyText.empty()) return false;
     account_jsondata["lock"]=true;
