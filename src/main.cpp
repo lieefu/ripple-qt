@@ -10,7 +10,7 @@
 #include <ripple/protocol/JsonFields.h>
 
 
-#include <util/wallet.hpp>
+#include <app/wallet.h>
 int main(int argc, char *argv[])
 {
     std::string password="abc123";
