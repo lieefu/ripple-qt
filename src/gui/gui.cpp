@@ -62,11 +62,11 @@ void Gui::showAboutWin(){
 void Gui::registerClick(){
     QDesktopServices::openUrl(QUrl("http://www.shanbay.com/referral/ref/9e54b69ab8/"));
 }
-void Gui::setMessage(const QString &text){
+void Gui::setMessage(const QString &text){//qml内可以直接调用 app的slot
     qDebug()<<"我收到消息："+text;
     QVariant returnedValue;
     QVariant msg= "我收到消息："+text;
-    QMetaObject::invokeMethod(mainWin, "setMessage",
+    QMetaObject::invokeMethod(mainWin, "setMessage",//调用qml内的fucntion
             Q_RETURN_ARG(QVariant, returnedValue),
             Q_ARG(QVariant, msg));
     qDebug()<<"我收到返回消息："+returnedValue.toString();
