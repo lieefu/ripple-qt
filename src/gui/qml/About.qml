@@ -9,7 +9,7 @@ Window {
     title: qsTr("ripple-qt")
     flags: Qt.Dialog
     AboutForm {
-        labelAbout.text: cfg.getLicenceInfo()
+        labelAbout.text: app.licenceinfo
         labelAbout.onLinkActivated: Qt.openUrlExternally(link)
     }
 }
