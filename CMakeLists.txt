@@ -15,7 +15,8 @@ INCLUDE_DIRECTORIES(./src)
 AUX_SOURCE_DIRECTORY(./src RIPPLE_QT_SRC_LIST)
 AUX_SOURCE_DIRECTORY(./src/app RIPPLE_QT_SRC_LIST)
 AUX_SOURCE_DIRECTORY(./src/util RIPPLE_QT_SRC_LIST)
-add_executable(${PROJECT_NAME}  ${RIPPLE_QT_SRC_LIST} ./src/gui/qml.qrc)
+SET(QRC_LIST ./src/gui/icons.qrc ./src/gui/qml.qrc)
+add_executable(${PROJECT_NAME}  ${RIPPLE_QT_SRC_LIST} ${QRC_LIST})
 target_link_libraries(${PROJECT_NAME} Qt5::Widgets Qt5::Qml cryptopp rippled)
 
 
