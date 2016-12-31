@@ -13,6 +13,7 @@ ApplicationWindow {
         currentIndex: tabBar.currentIndex
 
         Page1 {
+            id: page1
         }
 
         Page {
@@ -37,5 +38,9 @@ ApplicationWindow {
         //console.log("main windows is closing");
         visible = false;
         close.accepted = false;
+    }
+    function setMessage(msg){
+        console.log("Response text: " + msg);
+        return page1.setMessage("page set message");
     }
 }

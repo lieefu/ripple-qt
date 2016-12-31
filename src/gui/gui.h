@@ -32,10 +32,11 @@ public:
     explicit Gui(QObject *parent = 0);
 
 signals:
-    ;
+   void newMessagePosted(const QString &msg);
     //outer send signal to wint;
 
 public slots:
+    void setMessage(const QString &text);
     void registerClick();
 public:
     void init();

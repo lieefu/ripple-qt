@@ -22,7 +22,7 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 #include <QDesktopServices>
-#include "Gui.h"
+#include "gui.h"
 Gui::Gui(QObject *parent) : QObject(parent)
 {
 
@@ -30,10 +30,10 @@ Gui::Gui(QObject *parent) : QObject(parent)
 void Gui::init(){
 
     engine = new QQmlApplicationEngine();
-//    QQmlContext *context = engine->rootContext();
-//    context->setContextProperty("cfg", DICT::cfg.get());
+    QQmlContext *context = engine->rootContext();
+    context->setContextProperty("app", this);
 
-    engine->load(QUrl(QStringLiteral("qrc:/main.qml")));
+    engine->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
     mainWin = qobject_cast<QWindow*>(engine->rootObjects().at(0));
     mainWin->setIcon(QIcon(":/img/logo.png"));
 #ifdef Q_OS_WIN
@@ -41,7 +41,7 @@ void Gui::init(){
 #else
     mainWin->setFlags(Qt::WindowStaysOnTopHint);
 #endif
-    engine->load(QUrl(QStringLiteral("qrc:/About.qml")));
+    engine->load(QUrl(QStringLiteral("qrc:/qml/About.qml")));
     aboutWin = qobject_cast<QWindow*>(engine->rootObjects().at(1));
     aboutWin->setIcon(QIcon(":/img/logo.png"));
 }
@@ -61,5 +61,14 @@ void Gui::showAboutWin(){
 }
 void Gui::registerClick(){
     QDesktopServices::openUrl(QUrl("http://www.shanbay.com/referral/ref/9e54b69ab8/"));
+}
+void Gui::setMessage(const QString &text){
+    qDebug()<<"我收到消息："+text;
+    QVariant returnedValue;
+    QVariant msg= "我收到消息："+text;
+    QMetaObject::invokeMethod(mainWin, "setMessage",
+            Q_RETURN_ARG(QVariant, returnedValue),
+            Q_ARG(QVariant, msg));
+    qDebug()<<"我收到返回消息："+returnedValue.toString();
 }
 

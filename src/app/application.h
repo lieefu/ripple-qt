@@ -26,7 +26,7 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QAction>
-#include <app/Gui.h>
+#include <gui/gui.h>
 class Application
 {
 public:
