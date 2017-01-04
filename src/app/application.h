@@ -26,7 +26,8 @@
 #include <QSystemTrayIcon>
 #include <QMenu>
 #include <QAction>
-#include <gui/gui.h>
+#include <app/ripple.h>
+#include <app/wallet.h>
 class Application
 {
 public:
@@ -49,5 +50,6 @@ private:
 
 namespace cute{
     extern std::unique_ptr<Application> app;
+    extern std::unique_ptr<Wallet> wallet;
 }
 #endif // APPLICATION_H

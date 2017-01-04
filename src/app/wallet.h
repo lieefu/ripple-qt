@@ -6,7 +6,7 @@
 
 namespace cute {
 const std::string wallet_profile=R"({
-        "lock": false,
+        "crypt": false,
         "version": "1.0",
         "account":{
                "id":"rDoxWHE1usiA4FxBhSN463LZ7oLPK6b7Hw",
@@ -23,6 +23,7 @@ public:
     bool isLocked{false};
     bool isEmpty{false};
     bool isError{true};
+    bool isCrypt{false};
     bool isOK();
     bool open();
     bool save();
@@ -33,6 +34,7 @@ public:
     //设置支付密码，交易签署需要私钥时，输入此密码，解锁私钥。
     bool setKeyPass(const std::string &password);
     bool setJsonData(const std::string &jsonstr);
+    bool setData(const std::string &id,const std::string &key,const std::string &name);
     std::string getJsonData(const int indent = -1);
 private:
     std::string wallet_filedata;

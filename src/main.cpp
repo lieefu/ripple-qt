@@ -40,6 +40,7 @@ int main(int argc, char *argv[])
 //    font.setFamily("WenQuanYi Micro Hei");
 //    qApp->setFont(font);
 //#endif
+    cute::app = std::make_unique<Application>();
     cute::app->run();
 
     return app.exec();

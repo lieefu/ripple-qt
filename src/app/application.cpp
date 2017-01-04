@@ -6,13 +6,16 @@
 #include <QMimeData>
 #include <QThread>
 #include "app/application.h"
+#include <gui/gui.h>
 
 std::unique_ptr<Application> cute::app = std::make_unique<Application>();
-std::unique_ptr<Gui> cute::gui = std::make_unique<Gui>();
+std::unique_ptr<cute::Wallet> cute::wallet = std::make_unique<cute::Wallet>();
 Application::Application(){
 }
 
 void Application::init(){
+    cute::wallet->open();
+    cute::gui = std::make_unique<Gui>();
     cute::gui->init();
 }
 void Application::close(){
