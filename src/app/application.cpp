@@ -71,6 +71,5 @@ void Application::closeSystrayIcon(){
 }
 void Application::run(){
     init();
-    showSystrayIcon();
 }
 

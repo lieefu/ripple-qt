@@ -23,39 +23,67 @@
 #include <app/application.h>
 #include "gui.h"
 std::unique_ptr<Gui> cute::gui;
-Gui::Gui(QObject *parent) : QObject(parent)
-{}
+Gui::Gui(QObject *parent) : QObject(parent){
+}
 void Gui::init(){
-
     //engine = std::make_unique<QQmlApplicationEngine>();
     engine = new QQmlApplicationEngine();//Qt 的类对象具有自动释放资源能力，只能new使用，而且无需delete，不能使用std::unique_ptr机制
     engine->rootContext()->setContextProperty("app", this);
-
-    engine->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-    mainWin = qobject_cast<QWindow*>(engine->rootObjects().at(0));
-    mainWin->setIcon(QIcon(":/img/logo.png"));
-#ifdef Q_OS_WIN
-    mainWin->setFlags(Qt::Dialog);
-#else
-    mainWin->setFlags(Qt::WindowStaysOnTopHint);
-#endif
-    engine->load(QUrl(QStringLiteral("qrc:/qml/About.qml")));
-    aboutWin = qobject_cast<QWindow*>(engine->rootObjects().at(1));
-    aboutWin->setIcon(QIcon(":/img/logo.png"));
+    if(!this->existWallet()){
+        engine->load(QUrl(QStringLiteral("qrc:/qml/CreateWallet.qml")));
+        createWalletWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+        createWalletWin->setIcon(QIcon(":/img/logo.png"));
+        return;
+    }
+    if(this->walletIsEncrypted()){
+        engine->load(QUrl(QStringLiteral("qrc:/qml/DecryptWallet.qml")));
+        createWalletWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+        createWalletWin->setIcon(QIcon(":/img/logo.png"));
+        return;
+    }
+    showMainWin();
 }
 //mainWin
 void Gui::showMainWin(){
-    //mainWin->hide();
-    mainWin->showNormal();
+    if(mainWin){
+        mainWin->showNormal();
+        return;
+    }
+    qDebug()<<"首次显示main windows";
+    engine->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+    mainWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+    mainWin->setIcon(QIcon(":/img/logo.png"));
+//#ifdef Q_OS_WIN
+//    mainWin->setFlags(Qt::Dialog);
+//#else
+//    mainWin->setFlags(Qt::WindowStaysOnTopHint);
+//#endif
+    QVariant arg= QString::fromStdString(cute::wallet->getAccount());
+    QMetaObject::invokeMethod(mainWin, "setAccount",Q_ARG(QVariant, arg));
+    cute::app->showSystrayIcon();
 }
 void Gui::hideMainWin(){
     mainWin->hide();
+}
+void Gui::showEncryptWin(){
+    if(encryptWin){
+        encryptWin->showNormal();
+        return;
+    }
+    engine->load(QUrl(QStringLiteral("qrc:/qml/EncryptWallet.qml")));
+    encryptWin = qobject_cast<QWindow*>(engine->rootObjects().last());
 }
 bool Gui::mainWinIsVisible(){
     return mainWin->isVisible();
 }
 void Gui::showAboutWin(){
-    aboutWin->show();
+    if(aboutWin){
+        aboutWin->show();
+        return;
+    }
+    engine->load(QUrl(QStringLiteral("qrc:/qml/About.qml")));
+    aboutWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+    aboutWin->setIcon(QIcon(":/img/logo.png"));
 }
 void Gui::registerClick(){
     QDesktopServices::openUrl(QUrl("http://www.shanbay.com/referral/ref/9e54b69ab8/"));
@@ -77,13 +105,14 @@ bool Gui::existWallet(){
     qDebug()<<"存在钱包："<< cute::wallet->isOK();
     return cute::wallet->isOK();
 }
-bool Gui::walletIsCrypt(){
-    qDebug()<<"钱包是否加密："<< cute::wallet->isCrypt;
-    return cute::wallet->isCrypt;
+bool Gui::walletIsEncrypted(){
+    qDebug()<<"钱包是否加密："<< cute::wallet->isEncrypted;
+    return cute::wallet->isEncrypted;
 }
 bool Gui::saveWallet(const QString id, const QString key, const QString name){
-    bool ret=cute::wallet->setData(id.toStdString(),key.toStdString(),name.toStdString());
+    bool ret=cute::wallet->setAccount(id.toStdString(),key.toStdString(),name.toStdString());
     qDebug()<<"baocun hou存在钱包："<< cute::wallet->isOK();
     emit existWalletChanged(cute::wallet->isOK());
     return ret;
 }
+

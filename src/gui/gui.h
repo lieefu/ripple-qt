@@ -32,19 +32,12 @@ class QQmlApplicationEngine;
 class Gui : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString licenceinfo READ licenceinfo)
-    Q_PROPERTY(bool existWallet READ existWallet NOTIFY existWalletChanged)
-    Q_PROPERTY(bool walletIsCrypt READ walletIsCrypt NOTIFY walletIsCryptChanged)
 public:
     explicit Gui(QObject *parent = 0);
     QString licenceinfo(){
         return licenceinformation;
     }
-    bool existWallet();
-    bool walletIsCrypt();
-Q_INVOKABLE const QString generatorWallet();
-Q_INVOKABLE bool saveWallet(const QString id,const QString key,const QString name);
-signals:
+ signals:
    void existWalletChanged(bool);
    void walletIsCryptChanged(bool);
    void newMessagePosted(const QString &msg);
@@ -54,14 +47,24 @@ public slots://qml invoked
     void setMessage(const QString &text);
     void registerClick();
 public:
+    Q_PROPERTY(QString licenceinfo READ licenceinfo)
+    Q_PROPERTY(bool existWallet READ existWallet NOTIFY existWalletChanged)
+    Q_PROPERTY(bool walletIsEncrypted READ walletIsEncrypted NOTIFY walletIsCryptChanged)
+    bool existWallet();
+    bool walletIsEncrypted();
+Q_INVOKABLE const QString generatorWallet();
+Q_INVOKABLE bool saveWallet(const QString id,const QString key,const QString name);
+Q_INVOKABLE void showMainWin();
+Q_INVOKABLE void showEncryptWin();
     void init();
-    void showMainWin();
     void hideMainWin();
     bool mainWinIsVisible();
     void showAboutWin();
 
-    QWindow* mainWin;
-    QWindow* aboutWin;
+    QWindow* mainWin{Q_NULLPTR};
+    QWindow* createWalletWin{Q_NULLPTR};
+    QWindow* encryptWin{Q_NULLPTR};
+    QWindow* aboutWin{Q_NULLPTR};
 private:
     QQmlApplicationEngine *engine;
     QString versioninformation=QObject::tr("扇贝词典2.0.1");

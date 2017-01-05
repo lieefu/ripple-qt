@@ -6,5 +6,11 @@
         <file>qml/About.qml</file>
         <file>qml/AboutForm.ui.qml</file>
         <file>qml/qtquickcontrols2.conf</file>
+        <file>qml/CreateWallet.qml</file>
+        <file>qml/CreateWalletForm.ui.qml</file>
+        <file>qml/DecryptWallet.qml</file>
+        <file>qml/DecryptWalletForm.ui.qml</file>
+        <file>qml/EncryptWallet.qml</file>
+        <file>qml/EncryptWalletForm.ui.qml</file>
     </qresource>
 </RCC>
