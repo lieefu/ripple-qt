@@ -45,45 +45,44 @@ void Gui::init(){
 }
 //mainWin
 void Gui::showMainWin(){
-    if(mainWin){
-        mainWin->showNormal();
-        return;
+    if(mainWin==nullptr){
+        qDebug()<<"首次显示main windows";
+        engine->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
+        mainWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+        mainWin->setIcon(QIcon(":/img/logo.png"));
+        //#ifdef Q_OS_WIN
+        //    mainWin->setFlags(Qt::Dialog);
+        //#else
+        //    mainWin->setFlags(Qt::WindowStaysOnTopHint);
+        //#endif
+        QVariant arg= QString::fromStdString(cute::wallet->getAccount());
+        QMetaObject::invokeMethod(mainWin, "setAccount",Q_ARG(QVariant, arg));
+        cute::app->showSystrayIcon();
     }
-    qDebug()<<"首次显示main windows";
-    engine->load(QUrl(QStringLiteral("qrc:/qml/main.qml")));
-    mainWin = qobject_cast<QWindow*>(engine->rootObjects().last());
-    mainWin->setIcon(QIcon(":/img/logo.png"));
-//#ifdef Q_OS_WIN
-//    mainWin->setFlags(Qt::Dialog);
-//#else
-//    mainWin->setFlags(Qt::WindowStaysOnTopHint);
-//#endif
-    QVariant arg= QString::fromStdString(cute::wallet->getAccount());
-    QMetaObject::invokeMethod(mainWin, "setAccount",Q_ARG(QVariant, arg));
-    cute::app->showSystrayIcon();
+    mainWin->showNormal();
+    return;
 }
 void Gui::hideMainWin(){
     mainWin->hide();
 }
 void Gui::showEncryptWin(){
-    if(encryptWin){
-        encryptWin->showNormal();
-        return;
+    if(encryptWin==nullptr){
+        engine->load(QUrl(QStringLiteral("qrc:/qml/EncryptWallet.qml")));
+        encryptWin = qobject_cast<QWindow*>(engine->rootObjects().last());
     }
-    engine->load(QUrl(QStringLiteral("qrc:/qml/EncryptWallet.qml")));
-    encryptWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+    encryptWin->showNormal();
+
 }
 bool Gui::mainWinIsVisible(){
     return mainWin->isVisible();
 }
 void Gui::showAboutWin(){
-    if(aboutWin){
-        aboutWin->show();
-        return;
+    if(aboutWin==nullptr){
+        engine->load(QUrl(QStringLiteral("qrc:/qml/About.qml")));
+        aboutWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+        aboutWin->setIcon(QIcon(":/img/logo.png"));
     }
-    engine->load(QUrl(QStringLiteral("qrc:/qml/About.qml")));
-    aboutWin = qobject_cast<QWindow*>(engine->rootObjects().last());
-    aboutWin->setIcon(QIcon(":/img/logo.png"));
+    aboutWin->show();
 }
 void Gui::registerClick(){
     QDesktopServices::openUrl(QUrl("http://www.shanbay.com/referral/ref/9e54b69ab8/"));

@@ -61,10 +61,10 @@ Q_INVOKABLE void showEncryptWin();
     bool mainWinIsVisible();
     void showAboutWin();
 
-    QWindow* mainWin{Q_NULLPTR};
-    QWindow* createWalletWin{Q_NULLPTR};
-    QWindow* encryptWin{Q_NULLPTR};
-    QWindow* aboutWin{Q_NULLPTR};
+    QWindow* mainWin{nullptr};
+    QWindow* createWalletWin{nullptr};
+    QWindow* encryptWin{nullptr};
+    QWindow* aboutWin{nullptr};
 private:
     QQmlApplicationEngine *engine;
     QString versioninformation=QObject::tr("扇贝词典2.0.1");

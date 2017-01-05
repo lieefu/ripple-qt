@@ -1,45 +1,67 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.0
+import QtQuick.Layouts 1.1
+import Qt.labs.platform 1.0
 
 ApplicationWindow {
     id: window
-    property var account: null
+    property var account
     visible: true
     width: 640
     height: 480
     title: qsTr("Hello World")
     flags: Qt.Dialog
-    header: ToolBar {
-        TabButton {
-            text: qsTr("File")
-            onClicked: menu.open();
-            Menu {
-                id: menu
-                title: "File"
-                MenuItem {
-                    text: "Encrypt"
-                    onTriggered: {
-                        console.log("encrypt menu click");
-                        app.showEncryptWin();
-                        //window.visible = false;
-                    }
+    MenuBar {
+        Menu {
+            id: menu
+            title: "File"
+            MenuItem {
+                text: qsTr("&Encrypt")
+                onTriggered: {
+                    console.log("encrypt menu click");
+                    app.showEncryptWin();
+                    //window.visible = false;
                 }
-                MenuItem {
-                    text: "Cut"
-                }
+            }
+            MenuItem {
+                text: "Cut"
+            }
 
-                MenuItem {
-                    text: "Copy"
-                }
+            MenuItem {
+                text: "Copy"
+            }
 
-                MenuItem {
-                    text: "Paste"
+            MenuItem {
+                text: "Paste"
+            }
+        }
+
+        Menu {
+            id: menu1
+            title: "File"
+            MenuItem {
+                text: "Encrypt"
+                onTriggered: {
+                    console.log("encrypt menu click");
+                    app.showEncryptWin();
+                    //window.visible = false;
                 }
+            }
+            MenuItem {
+                text: "Cut"
+            }
+
+            MenuItem {
+                text: "Copy"
+            }
+
+            MenuItem {
+                text: "Paste"
             }
         }
 
     }
+
     SwipeView {
         id: swipeView
         anchors.fill: parent
