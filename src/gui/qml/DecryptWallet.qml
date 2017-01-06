@@ -3,15 +3,26 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 
 ApplicationWindow {
+    id: window
     visible: true
-    width: 640
-    height: 480
+    width: 500
+    height: 250
     title: qsTr("ripple-qt_输入钱包密码")
     flags: Qt.Dialog
-    DecryptWalletForm {
+    PasswordForm {
+        pass_label{
+            text:"钱包密码:"
+        }
         btn_return.onClicked: {
             var passtext=input_pass.text;
-            console.log(passtext);
+            if(app.decryptWallet(passtext)){
+                prompt_info.text="钱包解密成功";
+                app.showMainWin();
+                window.close();
+                return;
+            }
+            prompt_info.text="钱包解密失败";
+
         }
     }
 }

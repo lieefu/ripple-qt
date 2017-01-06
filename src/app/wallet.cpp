@@ -5,6 +5,10 @@ Wallet::Wallet(){}
 bool Wallet::isOK(){
     return !isError&&!isEmpty;
 }
+bool Wallet::isDecrypted(){
+    return !wallet_jsondata.is_null();
+}
+
 bool Wallet::open(){
     QFile file(wallet_filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)){
@@ -25,6 +29,9 @@ bool Wallet::open(){
     try{
         wallet_jsondata=Json::parse(wallet_filedata);
         isEncrypted=wallet_jsondata["encrypt"];
+        if(!isEncrypted){
+            isLocked = wallet_jsondata["account"]["lock"];
+        }
     }catch(...){
         isError=true;
         errMsg="wallet data error";
@@ -46,7 +53,8 @@ bool Wallet::encrypt(){
 }
 
 bool Wallet::encrypt(const std::string &password){//加密钱包数据
-    if(isEncrypted) return false;
+    if(!this->isDecrypted()) return false;
+    std::cout<<"加密钱包文件"<<password<<std::endl;
     std::string accountText=wallet_jsondata["account"].dump();
     //std::string plainText=wallet_jsondata.dump();
     if(accountText.empty()) return false;
@@ -71,13 +79,13 @@ bool Wallet::decrypt(const std::string &password){//解密钱包数据
     Json account_jsondata;
     try{
         account_jsondata=Json::parse(accountText);
+        isLocked = account_jsondata["lock"];
         std::cout<<"json parse ok"<<std::endl;
     }catch(...){
         std::cout<<"json parse error"<<std::endl;
         return false;
     }
     if(account_jsondata.is_object()){
-        isEncrypted=false;
         wallet_password=password;
         wallet_jsondata["account"]=account_jsondata;
         return true;
@@ -86,7 +94,7 @@ bool Wallet::decrypt(const std::string &password){//解密钱包数据
 }
 //设置支付密码，交易签署需要私钥时，输入此密码，解锁私钥。
 bool Wallet::setKeyPass(const std::string &password){
-    if(isEncrypted) return false;
+    if(!this->isDecrypted()) return false;
     Json account_jsondata=wallet_jsondata["account"];
     if(account_jsondata["lock"]) return false;
     std::string keyText=account_jsondata["key"];
@@ -96,6 +104,9 @@ bool Wallet::setKeyPass(const std::string &password){
     account_jsondata["key"]=cute::aesEncrypt(password,keyText);
     wallet_jsondata["account"]=account_jsondata;
     return encrypt();
+}
+std::string Wallet::decryptKey(const std::string &password,const std::string &keystr){
+    return cute::aesEncrypt(password,keystr);
 }
 
 bool Wallet::setJsonData(const std::string &jsonstr){
@@ -129,10 +140,9 @@ bool Wallet::setAccount(const std::string &id,const std::string &key,const std::
 
 }
 std::string Wallet::getAccount(){
-    if(this->isEncrypted){
-        return "";
-    }else{
+    if(this->isDecrypted()){
         return wallet_jsondata["account"].dump();
     }
+    return "";
 }
 }

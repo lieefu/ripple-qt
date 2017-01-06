@@ -7,11 +7,11 @@ ApplicationWindow {
     visible: true
     width: 500
     height: 250
-    title: qsTr("ripple-qt_加密钱包文件")
+    title: qsTr("ripple-qt_加密私钥")
     flags: Qt.Dialog
     SetPasswordForm {
         pass_label{
-            text:qsTr("钱包密码")
+            text:qsTr("支付密码：")
         }
 
         btn_return.onClicked: {
@@ -23,10 +23,10 @@ ApplicationWindow {
                 return;
             }
             if(app.encryptWallet(passtext1)){
-                prompt_info.text = "钱包文件已加密。";
+                prompt_info.text = "支付密码已设置(私钥已加密)。";
                 window.close();
             }else{
-                prompt_info.text = "钱包文件加密失败！";
+                prompt_info.text = "支付密码设置(私钥已加密)失败！";
             }
 
         }

@@ -20,10 +20,11 @@ class Wallet{
 public:
     Wallet();
     QString errMsg;
-    bool isLocked{false};
+    bool isLocked{true};//私钥是否被加密
     bool isEmpty{false};
     bool isError{true};
     bool isEncrypted{false};
+    bool isDecrypted();
     bool isOK();
     bool open();
     bool save();
@@ -33,6 +34,7 @@ public:
     bool decrypt(const std::string &password);
     //设置支付密码，交易签署需要私钥时，输入此密码，解锁私钥。
     bool setKeyPass(const std::string &password);
+    std::string decryptKey(const std::string &password,const std::string &keystr);
     bool setJsonData(const std::string &jsonstr);
     std::string getJsonData(const int indent = -1);
     bool setAccount(const std::string &id,const std::string &key,const std::string &name);

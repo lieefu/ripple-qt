@@ -11,7 +11,7 @@ ApplicationWindow {
     title: qsTr("Hello World")
     flags: Qt.Dialog
     header:RowLayout {
-        width: 60
+        width: childrenRect.width
         ToolButton{
             text: qsTr("File")
             onClicked: menu.open();
@@ -22,15 +22,22 @@ ApplicationWindow {
                 topMargin: 30
                 leftMargin: 10
                 MenuItem {
-                    text: qsTr("&Encrypt")
+                    text: qsTr("EncryptWallet")
+                    enabled: !app.walletIsEncrypted
                     onTriggered: {
                         console.log("encrypt menu click");
-                        app.showEncryptWin();
+                        app.showEncryptWalletWin();
                         //window.visible = false;
                     }
                 }
                 MenuItem {
-                    text: "Cut"
+                    text: qsTr("EncryptKey")
+                    enabled: !app.accountKeyIsLocked
+                    onTriggered: {
+                        console.log("EncryptKey menu click");
+                        app.showEncryptKeyWin();
+                        //window.visible = false;
+                    }
                 }
 
                 MenuItem {

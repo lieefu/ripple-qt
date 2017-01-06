@@ -53,4 +53,22 @@ Item {
         height: 14
         text: qsTr("显示私钥")
     }
+
+    RadioButton {
+        id: radio_walletencypt
+        x: 134
+        y: 290
+        text: qsTr("钱包加密")
+        checkable: false
+        checked: app.walletIsEncrypted
+    }
+
+    RadioButton {
+        id: radioButton
+        x: 243
+        y: 290
+        text: qsTr("秘钥锁定(支付密码)")
+        checkable: false
+        checked: app.accountIsLocked
+    }
 }

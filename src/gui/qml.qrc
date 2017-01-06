@@ -9,8 +9,9 @@
         <file>qml/CreateWallet.qml</file>
         <file>qml/CreateWalletForm.ui.qml</file>
         <file>qml/DecryptWallet.qml</file>
-        <file>qml/DecryptWalletForm.ui.qml</file>
+        <file>qml/PasswordForm.ui.qml</file>
         <file>qml/EncryptWallet.qml</file>
-        <file>qml/EncryptWalletForm.ui.qml</file>
+        <file>qml/SetPasswordForm.ui.qml</file>
+        <file>qml/EncryptKey.qml</file>
     </qresource>
 </RCC>

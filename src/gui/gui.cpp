@@ -65,14 +65,21 @@ void Gui::showMainWin(){
 void Gui::hideMainWin(){
     mainWin->hide();
 }
-void Gui::showEncryptWin(){
-    if(encryptWin==nullptr){
+void Gui::showEncryptWalletWin(){
+    if(encryptWalletWin==nullptr){
         engine->load(QUrl(QStringLiteral("qrc:/qml/EncryptWallet.qml")));
-        encryptWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+        encryptWalletWin = qobject_cast<QWindow*>(engine->rootObjects().last());
     }
-    encryptWin->showNormal();
-
+    encryptWalletWin->showNormal();
 }
+void Gui::showEncryptKeyWin(){
+    if(encryptKeyWin==nullptr){
+        engine->load(QUrl(QStringLiteral("qrc:/qml/EncryptKey.qml")));
+        encryptKeyWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+    }
+    encryptKeyWin->showNormal();
+}
+
 bool Gui::mainWinIsVisible(){
     return mainWin->isVisible();
 }
@@ -108,10 +115,31 @@ bool Gui::walletIsEncrypted(){
     qDebug()<<"钱包是否加密："<< cute::wallet->isEncrypted;
     return cute::wallet->isEncrypted;
 }
+bool Gui::accountKeyIsLocked(){
+    qDebug()<<"钱包是否加密："<< cute::wallet->isEncrypted;
+    return cute::wallet->isLocked;
+}
+
 bool Gui::saveWallet(const QString id, const QString key, const QString name){
     bool ret=cute::wallet->setAccount(id.toStdString(),key.toStdString(),name.toStdString());
     qDebug()<<"baocun hou存在钱包："<< cute::wallet->isOK();
     emit existWalletChanged(cute::wallet->isOK());
     return ret;
+}
+bool Gui::encryptWallet(const QString pass){
+    bool ret=cute::wallet->encrypt(pass.toStdString());
+    emit walletIsEncryptedChanged(ret);
+    return ret;
+}
+bool Gui::decryptWallet(const QString pass){
+    return cute::wallet->decrypt(pass.toStdString());
+}
+bool Gui::encryptKey(const QString pass){
+    bool ret=cute::wallet->setKeyPass(pass.toStdString());
+    emit accountKeyIsLockedChanged(ret);
+    return ret;
+}
+const QString Gui::decryptKey(const QString pass,const QString keystr){
+    return QString::fromStdString(cute::wallet->decryptKey(pass.toStdString(),keystr.toStdString()));
 }
 
