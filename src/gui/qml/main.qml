@@ -1,7 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
-import Qt.labs.platform 1.0
 
 ApplicationWindow {
     id: window
@@ -11,57 +10,70 @@ ApplicationWindow {
     height: 480
     title: qsTr("Hello World")
     flags: Qt.Dialog
-    MenuBar {
-        Menu {
-            id: menu
-            title: "File"
-            MenuItem {
-                text: qsTr("&Encrypt")
-                onTriggered: {
-                    console.log("encrypt menu click");
-                    app.showEncryptWin();
-                    //window.visible = false;
+    header:RowLayout {
+        width: 60
+        ToolButton{
+            text: qsTr("File")
+            onClicked: menu.open();
+            Menu {
+                id: menu
+                title: "File"
+                width: 120
+                topMargin: 30
+                leftMargin: 10
+                MenuItem {
+                    text: qsTr("&Encrypt")
+                    onTriggered: {
+                        console.log("encrypt menu click");
+                        app.showEncryptWin();
+                        //window.visible = false;
+                    }
+                }
+                MenuItem {
+                    text: "Cut"
+                }
+
+                MenuItem {
+                    text: "Copy"
+                }
+
+                MenuItem {
+                    text: "Paste"
                 }
             }
-            MenuItem {
-                text: "Cut"
-            }
-
-            MenuItem {
-                text: "Copy"
-            }
-
-            MenuItem {
-                text: "Paste"
-            }
         }
+        ToolButton{
+            text: qsTr("Setting")
+            onClicked: menu1.open();
+            Menu {
+                id: menu1
+                title: "File"
+                width: 120
+                topMargin: 30
+                leftMargin: 10
+                MenuItem {
+                    text: "Encrypt"
+                    onTriggered: {
+                        console.log("encrypt menu click");
+                        app.showEncryptWin();
+                        //window.visible = false;
+                    }
+                }
+                MenuItem {
+                    text: "Cut"
+                }
 
-        Menu {
-            id: menu1
-            title: "File"
-            MenuItem {
-                text: "Encrypt"
-                onTriggered: {
-                    console.log("encrypt menu click");
-                    app.showEncryptWin();
-                    //window.visible = false;
+                MenuItem {
+                    text: "Copy"
+                }
+
+                MenuItem {
+                    text: "Paste"
                 }
             }
-            MenuItem {
-                text: "Cut"
-            }
 
-            MenuItem {
-                text: "Copy"
-            }
-
-            MenuItem {
-                text: "Paste"
-            }
         }
-
     }
-
     SwipeView {
         id: swipeView
         anchors.fill: parent
@@ -88,9 +100,9 @@ ApplicationWindow {
         }
     }
     onClosing:{
-        //console.log("main windows is closing");
-        visible = false;
-        close.accepted = false;
+        console.log("main windows is closing");
+        //visible = false;
+        //close.accepted = false;
     }
     function setAccount(accountstr){
         console.log("Response text: " + accountstr);

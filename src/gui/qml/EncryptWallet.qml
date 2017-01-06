@@ -5,9 +5,9 @@ import QtQuick.Layouts 1.0
 ApplicationWindow {
     id: window
     visible: true
-    width: 640
-    height: 480
-    title: qsTr("ripple-qt_输入钱包密码")
+    width: 500
+    height: 250
+    title: qsTr("ripple-qt_加密钱包文件")
     flags: Qt.Dialog
     EncryptWalletForm {
         btn_return.onClicked: {
