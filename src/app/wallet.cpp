@@ -6,7 +6,7 @@ bool Wallet::isOK(){
     return !isError&&!isEmpty;
 }
 bool Wallet::isDecrypted(){
-    return !wallet_jsondata.is_null();
+    return !wallet_jsondata["account"]["id"].is_null();
 }
 
 bool Wallet::open(){
@@ -105,8 +105,9 @@ bool Wallet::setKeyPass(const std::string &password){
     wallet_jsondata["account"]=account_jsondata;
     return encrypt();
 }
-std::string Wallet::decryptKey(const std::string &password,const std::string &keystr){
-    return cute::aesEncrypt(password,keystr);
+std::string Wallet::decryptKey(const std::string &password){
+    if(!Wallet::isDecrypted()) return "";
+    return cute::aesDecrypt(password,wallet_jsondata["account"]["key"]);
 }
 
 bool Wallet::setJsonData(const std::string &jsonstr){

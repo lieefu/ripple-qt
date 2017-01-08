@@ -6,6 +6,7 @@ Item {
     property alias wallet_id: wallet_id
     property string showkeystr: qsTr("wallet key.")
     property string hidekeystr: qsTr("*************")
+    property alias switch_showkey: switch_showkey
     RowLayout {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.topMargin: 20
@@ -40,13 +41,13 @@ Item {
         id: wallet_key
         x: 167
         y: 162
-        text: switch1.checked ? showkeystr : hidekeystr
+        text: switch_showkey.checked ? showkeystr : hidekeystr
         readOnly: true
         selectByMouse: true
     }
 
     Switch {
-        id: switch1
+        id: switch_showkey
         x: 486
         y: 158
         width: 123
@@ -54,21 +55,23 @@ Item {
         text: qsTr("显示私钥")
     }
 
-    RadioButton {
-        id: radio_walletencypt
+    CheckBox {
         x: 134
         y: 290
-        text: qsTr("钱包加密")
+        text: checked?qsTr("钱包已加密"):qsTr("钱包未加密")
+        enabled: false
+        autoExclusive: false
         checkable: false
         checked: app.walletIsEncrypted
     }
 
-    RadioButton {
-        id: radioButton
+    CheckBox {
         x: 243
         y: 290
-        text: qsTr("秘钥锁定(支付密码)")
+        text: checked?qsTr("秘钥已锁定(支付密码)"):qsTr("秘钥未锁定(支付密码)")
+        enabled: false
+        autoExclusive: false
         checkable: false
-        checked: app.accountIsLocked
+        checked: account.lock
     }
 }

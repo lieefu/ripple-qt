@@ -22,7 +22,7 @@ ApplicationWindow {
                 prompt_info.text = "两次密码输入不一致";
                 return;
             }
-            if(app.encryptWallet(passtext1)){
+            if(app.encryptKey(passtext1)){
                 prompt_info.text = "支付密码已设置(私钥已加密)。";
                 window.close();
             }else{

@@ -34,7 +34,7 @@ public:
     bool decrypt(const std::string &password);
     //设置支付密码，交易签署需要私钥时，输入此密码，解锁私钥。
     bool setKeyPass(const std::string &password);
-    std::string decryptKey(const std::string &password,const std::string &keystr);
+    std::string decryptKey(const std::string &password);
     bool setJsonData(const std::string &jsonstr);
     std::string getJsonData(const int indent = -1);
     bool setAccount(const std::string &id,const std::string &key,const std::string &name);

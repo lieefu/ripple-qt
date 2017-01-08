@@ -79,6 +79,13 @@ void Gui::showEncryptKeyWin(){
     }
     encryptKeyWin->showNormal();
 }
+void Gui::showDecryptKeyWin(){
+    if(encryptKeyWin==nullptr){
+        engine->load(QUrl(QStringLiteral("qrc:/qml/DecryptKey.qml")));
+        decryptKeyWin = qobject_cast<QWindow*>(engine->rootObjects().last());
+    }
+    decryptKeyWin->showNormal();
+}
 
 bool Gui::mainWinIsVisible(){
     return mainWin->isVisible();
@@ -139,7 +146,7 @@ bool Gui::encryptKey(const QString pass){
     emit accountKeyIsLockedChanged(ret);
     return ret;
 }
-const QString Gui::decryptKey(const QString pass,const QString keystr){
-    return QString::fromStdString(cute::wallet->decryptKey(pass.toStdString(),keystr.toStdString()));
+const QString Gui::decryptKey(const QString pass){
+    return QString::fromStdString(cute::wallet->decryptKey(pass.toStdString()));
 }
 

@@ -60,10 +60,11 @@ Q_INVOKABLE bool saveWallet(const QString id,const QString key,const QString nam
 Q_INVOKABLE void showMainWin();
 Q_INVOKABLE void showEncryptWalletWin();
 Q_INVOKABLE void showEncryptKeyWin();
+Q_INVOKABLE void showDecryptKeyWin();
 Q_INVOKABLE bool encryptWallet(const QString pass);
 Q_INVOKABLE bool decryptWallet(const QString pass);
 Q_INVOKABLE bool encryptKey(const QString pass);
-Q_INVOKABLE const QString decryptKey(const QString pass,const QString keystr);
+Q_INVOKABLE const QString decryptKey(const QString pass);
     void init();
     void hideMainWin();
     bool mainWinIsVisible();
@@ -73,6 +74,7 @@ Q_INVOKABLE const QString decryptKey(const QString pass,const QString keystr);
     QWindow* createWalletWin{nullptr};
     QWindow* encryptWalletWin{nullptr};
     QWindow* encryptKeyWin{nullptr};
+    QWindow* decryptKeyWin{nullptr};
     QWindow* aboutWin{nullptr};
 private:
     QQmlApplicationEngine *engine;

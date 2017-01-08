@@ -1,17 +1,18 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
+import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     id: window
-    property var account
+    property var account:{"lock":false}
     visible: true
     width: 640
     height: 480
     title: qsTr("Hello World")
     flags: Qt.Dialog
     header:RowLayout {
-        width: childrenRect.width
+        //width: childrenRect.width
         ToolButton{
             text: qsTr("File")
             onClicked: menu.open();
@@ -87,6 +88,17 @@ ApplicationWindow {
         currentIndex: tabBar.currentIndex
         Page1 {
             id: accountpage
+            switch_showkey.onCheckedChanged: {
+                console.log(switch_showkey.checked);
+                if(account.lock&&switch_showkey.checked){
+                    //app.showDecryptKeyWin();
+//                    var component = Qt.createComponent("DecryptKey.qml")
+//                                var window    = component.createObject(window)
+//                                window.show()
+                   keypassDialog.open();
+                   switch_showkey.checked=false;
+                }
+            }
         }
         Page {
             Label {
@@ -122,5 +134,33 @@ ApplicationWindow {
         }
 
         console.log(account["id"]);
+    }
+    Dialog {
+        id: keypassDialog
+        width: 500
+        height: 250
+        title: qsTr("ripple-qt_输入私钥密码")
+        standardButtons: StandardButton.NoButton;
+        PasswordForm {
+            pass_label{
+                text:"私钥密码:"
+            }
+            btn_return.onClicked: {
+                var passtext=input_pass.text;
+                var keystr=app.decryptKey(passtext);
+                if(keystr===""){
+                   prompt_info.text="密码错误，私钥解密失败！";
+
+                    return;
+                }
+                prompt_info.text="私钥解密成功";
+                accountpage.showkeystr=keystr
+                keypassDialog.click(StandardButton.Ok);
+                account.lock = false;
+                account.key=accountpage.showkeystr=keystr;
+                accountpage.hidekeystr = "***************";
+                accountpage.switch_showkey.checked=true;
+            }
+        }
     }
 }

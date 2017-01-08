@@ -13,5 +13,6 @@
         <file>qml/EncryptWallet.qml</file>
         <file>qml/SetPasswordForm.ui.qml</file>
         <file>qml/EncryptKey.qml</file>
+        <file>qml/DecryptKey.qml</file>
     </qresource>
 </RCC>
