@@ -40,8 +40,20 @@ int main(int argc, char *argv[])
 //    font.setFamily("WenQuanYi Micro Hei");
 //    qApp->setFont(font);
 //#endif
-    cute::app = std::make_unique<Application>();
-    cute::app->run();
+//    cute::app = std::make_unique<Application>();
+//    cute::app->run();
 
-    return app.exec();
+    std::string tx_json_profile=R"(
+                                {
+                               "Account": "rK9roDKCxTimvZtKQt8Ybx4sPMNoqCT3jm",
+                               "Amount": "100000000",
+                               "Destination": "rXzxK7wpKLZ99qwXNiy5nFQUhYxFZq3Rd",
+                               "TransactionType": "Payment",
+                               "Sequence":65,
+                               "Fee":10000
+                               }
+            )";
+    ripple::sign(tx_json_profile,"sh4cqBmScdRc7zML9kHCmY8iuJmNr");
+
+    //return app.exec();
 }

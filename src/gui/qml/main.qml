@@ -91,10 +91,6 @@ ApplicationWindow {
             switch_showkey.onCheckedChanged: {
                 console.log(switch_showkey.checked);
                 if(account.lock&&switch_showkey.checked){
-                    //app.showDecryptKeyWin();
-//                    var component = Qt.createComponent("DecryptKey.qml")
-//                                var window    = component.createObject(window)
-//                                window.show()
                    keypassDialog.open();
                    switch_showkey.checked=false;
                 }
@@ -147,6 +143,7 @@ ApplicationWindow {
             }
             btn_return.onClicked: {
                 var passtext=input_pass.text;
+                input_pass.text="";
                 var keystr=app.decryptKey(passtext);
                 if(keystr===""){
                    prompt_info.text="密码错误，私钥解密失败！";
