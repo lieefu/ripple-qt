@@ -61,7 +61,6 @@ Item {
         text: checked?qsTr("钱包已加密"):qsTr("钱包未加密")
         enabled: false
         autoExclusive: false
-        checkable: false
         checked: app.walletIsEncrypted
     }
 
@@ -71,7 +70,6 @@ Item {
         text: checked?qsTr("秘钥已锁定(支付密码)"):qsTr("秘钥未锁定(支付密码)")
         enabled: false
         autoExclusive: false
-        checkable: false
         checked: account.lock
     }
 }
