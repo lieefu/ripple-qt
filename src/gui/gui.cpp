@@ -123,7 +123,7 @@ bool Gui::walletIsEncrypted(){
     return cute::wallet->isEncrypted;
 }
 bool Gui::accountKeyIsLocked(){
-    qDebug()<<"钱包是否加密："<< cute::wallet->isEncrypted;
+    qDebug()<<"秘钥是否加密："<< cute::wallet->isLocked;
     return cute::wallet->isLocked;
 }
 

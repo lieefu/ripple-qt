@@ -6,7 +6,7 @@ bool Wallet::isOK(){
     return !isError&&!isEmpty;
 }
 bool Wallet::isDecrypted(){
-    return !wallet_jsondata["account"]["id"].is_null();
+    return wallet_jsondata["account"].is_object();
 }
 
 bool Wallet::open(){
@@ -94,13 +94,15 @@ bool Wallet::decrypt(const std::string &password){//解密钱包数据
 }
 //设置支付密码，交易签署需要私钥时，输入此密码，解锁私钥。
 bool Wallet::setKeyPass(const std::string &password){
-    if(!this->isDecrypted()) return false;
+    if(!this->isDecrypted()){
+        if(!this->decrypt())   return false;
+    }
     Json account_jsondata=wallet_jsondata["account"];
     if(account_jsondata["lock"]) return false;
     std::string keyText=account_jsondata["key"];
     //std::string plainText=wallet_jsondata.dump();
     if(keyText.empty()) return false;
-    account_jsondata["lock"]=true;
+    this->isLocked=account_jsondata["lock"]=true;
     account_jsondata["key"]=cute::aesEncrypt(password,keyText);
     wallet_jsondata["account"]=account_jsondata;
     return encrypt();
@@ -122,6 +124,9 @@ bool Wallet::setJsonData(const std::string &jsonstr){
     if(wallet_jsondata.is_object()){
         isEmpty=false;
         isEncrypted=wallet_jsondata["encrypt"];
+        if(!isEncrypted){
+            isLocked = wallet_jsondata["account"]["lock"];
+        }
         wallet_filedata=wallet_jsondata.dump();
         return save();
     }

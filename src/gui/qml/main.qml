@@ -12,13 +12,13 @@ ApplicationWindow {
     title: qsTr("Hello World")
     flags: Qt.Dialog
     header:RowLayout {
-        //width: childrenRect.width
+        width: childrenRect.width
         ToolButton{
-            text: qsTr("File")
+            text: qsTr("Wallet")
             onClicked: menu.open();
             Menu {
                 id: menu
-                title: "File"
+                title: "Wallet"
                 width: 120
                 topMargin: 30
                 leftMargin: 10
@@ -28,7 +28,6 @@ ApplicationWindow {
                     onTriggered: {
                         console.log("encrypt menu click");
                         app.showEncryptWalletWin();
-                        //window.visible = false;
                     }
                 }
                 MenuItem {
@@ -40,22 +39,14 @@ ApplicationWindow {
                         //window.visible = false;
                     }
                 }
-
-                MenuItem {
-                    text: "Copy"
-                }
-
-                MenuItem {
-                    text: "Paste"
-                }
             }
         }
         ToolButton{
-            text: qsTr("Setting")
+            text: qsTr("Trade")
             onClicked: menu1.open();
             Menu {
                 id: menu1
-                title: "File"
+                title: "Trade"
                 width: 120
                 topMargin: 30
                 leftMargin: 10
