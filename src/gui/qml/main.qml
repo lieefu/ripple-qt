@@ -5,7 +5,10 @@ import QtQuick.Dialogs 1.2
 
 ApplicationWindow {
     id: window
-    property var account:{"lock":false}
+    property var account
+    property bool keylocked: app.accountKeyIsLocked
+    property string keyshowstr: qsTr("key locked")
+    property string keyhidestr: qsTr("*********")
     visible: true
     width: 640
     height: 480
@@ -75,21 +78,18 @@ ApplicationWindow {
                    switch_showkey.checked=false;//if cancel keypassDialog,checked restore false
                    return;
                 }else{
-                    showkeystr=account.key;
-                    hidekeystr="*************";
+                    keyshowstr=account.key;
                 }
             }
             switch_keylock.onCheckedChanged: {
                 if(switch_keylock.checked){
-                    account.lock = true;
-                    showkeystr="key locked";
-                    hidekeystr="key locked";
+                    keylocked=account.lock = true;
+                    keyshowstr="key locked";
                 }else{
                     if(account.lock){
                         keypassDialog.open();
                     }else{
-                        showkeystr=account.key;
-                        hidekeystr="*************";
+                        keyshowstr=account.key;
                     }
                 }
             }
@@ -143,9 +143,9 @@ ApplicationWindow {
         account=JSON.parse(accountstr);
         accountpage.wallet_id.text=account["id"];
         if(account["lock"]){
-            accountpage.hidekeystr=accountpage.showkeystr="is locked";
+            keyshowstr="is locked";
         }else{
-            accountpage.showkeystr=account["key"];
+            keyshowstr=account["key"];
         }
 
         console.log(account["id"]);
@@ -171,11 +171,9 @@ ApplicationWindow {
                 }
                 prompt_info.text="私钥解密成功";
                 keypassDialog.click(StandardButton.Ok);
-                account.lock = false
-                accountpage.switch_keylock.checked= false;
+                keylocked=account.lock = false
                 account.key=keystr;
-                accountpage.showkeystr=account.key;
-                accountpage.hidekeystr="*************";
+                keyshowstr=account.key;
             }
         }
     }

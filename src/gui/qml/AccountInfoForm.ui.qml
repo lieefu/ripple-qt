@@ -5,8 +5,6 @@ import QtQuick.Layouts 1.0
 Item {
     property alias switch_keylock: switch_keylock
     property alias wallet_id: wallet_id
-    property string showkeystr: qsTr("wallet key.")
-    property string hidekeystr: qsTr("*************")
     property alias switch_showkey: switch_showkey
     RowLayout {
         anchors.horizontalCenter: parent.horizontalCenter
@@ -42,7 +40,7 @@ Item {
         id: wallet_key
         x: 167
         y: 162
-        text: switch_showkey.checked ? showkeystr : hidekeystr
+        text: switch_showkey.checked ? keyshowstr : keyhidestr
         readOnly: true
         selectByMouse: true
     }
@@ -78,9 +76,9 @@ Item {
         x: 338
         y: 305
         visible: app.accountKeyIsLocked
-        text: checked?qsTr("私钥(支付密码)已锁定"):qsTr("私钥密码(支付密码)已解锁")
+        text: checked?qsTr("私钥(支付密码)锁定"):qsTr("私钥密码(支付密码)已解锁")
         enabled: true
         autoExclusive: false
-        checked: account.lock
+        checked: keylocked
     }
 }
