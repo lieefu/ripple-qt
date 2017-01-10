@@ -39,35 +39,24 @@ ApplicationWindow {
                         //window.visible = false;
                     }
                 }
+                MenuItem {
+                    text: "AccountInfo"
+                    onTriggered: tabBar.currentIndex = 0;
+                }
             }
         }
         ToolButton{
-            text: qsTr("Trade")
+            text: qsTr("Transaction")
             onClicked: menu1.open();
             Menu {
                 id: menu1
-                title: "Trade"
+                title: "Transaction"
                 width: 120
                 topMargin: 30
                 leftMargin: 10
                 MenuItem {
-                    text: "Encrypt"
-                    onTriggered: {
-                        console.log("encrypt menu click");
-                        app.showEncryptWin();
-                        //window.visible = false;
-                    }
-                }
-                MenuItem {
-                    text: "Cut"
-                }
-
-                MenuItem {
-                    text: "Copy"
-                }
-
-                MenuItem {
-                    text: "Paste"
+                    text: "Payment"
+                    onTriggered: tabBar.currentIndex = 1;
                 }
             }
 
@@ -77,20 +66,59 @@ ApplicationWindow {
         id: swipeView
         anchors.fill: parent
         currentIndex: tabBar.currentIndex
-        Page1 {
+        AccountInfo {
             id: accountpage
             switch_showkey.onCheckedChanged: {
-                console.log(switch_showkey.checked);
-                if(account.lock&&switch_showkey.checked){
+                if(!switch_showkey.checked) return;
+                if(account.lock){
                    keypassDialog.open();
-                   switch_showkey.checked=false;
+                   switch_showkey.checked=false;//if cancel keypassDialog,checked restore false
+                   return;
+                }else{
+                    showkeystr=account.key;
+                    hidekeystr="*************";
+                }
+            }
+            switch_keylock.onCheckedChanged: {
+                if(switch_keylock.checked){
+                    account.lock = true;
+                    showkeystr="key locked";
+                    hidekeystr="key locked";
+                }else{
+                    if(account.lock){
+                        keypassDialog.open();
+                    }else{
+                        showkeystr=account.key;
+                        hidekeystr="*************";
+                    }
                 }
             }
         }
-        Page {
-            Label {
-                text: qsTr("Second page")
-                anchors.centerIn: parent
+        Payment {
+            btn_return.onClicked: {
+                if(account.lock){
+                    console.log("秘钥锁定，请解锁");
+                    keypassDialog.open();
+                    return;
+                }
+                var payment={
+                "Account": "sender address",
+                "Amount": "100000000",
+                "Destination": "recever address",
+                "TransactionType": "Payment",
+                "Sequence":12,
+                "Fee":10000
+                };
+                console.log("秘钥：",account.key);
+                console.log(reciver_address.text,xrp_amount.text);
+                payment.Account = account.id;
+                payment.Destination = reciver_address.text;
+                payment.Amount = xrp_amount.text;
+                payment.Sequence = 1;
+                var tx_json_str=JSON.stringify(payment);
+                console.log(tx_json_str);
+                var signjson_str= app.sign(tx_json_str,account.key);
+                console.log(signjson_str);
             }
         }
     }
@@ -99,10 +127,10 @@ ApplicationWindow {
         id: tabBar
         currentIndex: swipeView.currentIndex
         TabButton {
-            text: qsTr("First")
+            text: qsTr("AccountInfo")
         }
         TabButton {
-            text: qsTr("Second")
+            text: qsTr("Payment")
         }
     }
     onClosing:{
@@ -137,17 +165,17 @@ ApplicationWindow {
                 input_pass.text="";
                 var keystr=app.decryptKey(passtext);
                 if(keystr===""){
-                   prompt_info.text="密码错误，私钥解密失败！";
-
+                    prompt_info.text="密码错误，私钥解密失败！";
+                    accountpage.switch_keylock.checked=true;
                     return;
                 }
                 prompt_info.text="私钥解密成功";
-                accountpage.showkeystr=keystr
                 keypassDialog.click(StandardButton.Ok);
-                account.lock = false;
-                account.key=accountpage.showkeystr=keystr;
-                accountpage.hidekeystr = "***************";
-                accountpage.switch_showkey.checked=true;
+                account.lock = false
+                accountpage.switch_keylock.checked= false;
+                account.key=keystr;
+                accountpage.showkeystr=account.key;
+                accountpage.hidekeystr="*************";
             }
         }
     }

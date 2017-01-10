@@ -149,4 +149,8 @@ bool Gui::encryptKey(const QString pass){
 const QString Gui::decryptKey(const QString pass){
     return QString::fromStdString(cute::wallet->decryptKey(pass.toStdString()));
 }
-
+const QString Gui::sign(const QString tx_json_str, const QString key){
+    auto sign_data=ripple::sign(tx_json_str.toStdString(),key.toStdString());
+    if(sign_data==boost::none) return "";
+    return QString::fromStdString(*sign_data);
+}

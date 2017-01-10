@@ -65,6 +65,7 @@ Q_INVOKABLE bool encryptWallet(const QString pass);
 Q_INVOKABLE bool decryptWallet(const QString pass);
 Q_INVOKABLE bool encryptKey(const QString pass);
 Q_INVOKABLE const QString decryptKey(const QString pass);
+Q_INVOKABLE const QString sign(const QString tx_json_str,const QString key);
     void init();
     void hideMainWin();
     bool mainWinIsVisible();

@@ -97,7 +97,6 @@ boost::optional<std::string> sign(std::string const tx_json_str,std::string cons
     Json::Value jvResult;
     jvResult[jss::tx_json] = stpTrans->getJson (0);
     jvResult[jss::tx_blob] = strHex ( stpTrans->getSerializer ().peekData ());
-    std::cout<<jvResult.toStyledString();
-    return boost::none;
+    return jvResult.toStyledString();
 }
 }//end namespace

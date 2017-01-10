@@ -1,8 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/main.qml</file>
-        <file>qml/Page1.qml</file>
-        <file>qml/Page1Form.ui.qml</file>
+        <file>qml/AccountInfo.qml</file>
+        <file>qml/AccountInfoForm.ui.qml</file>
         <file>qml/About.qml</file>
         <file>qml/AboutForm.ui.qml</file>
         <file>qml/qtquickcontrols2.conf</file>
@@ -14,5 +14,7 @@
         <file>qml/SetPasswordForm.ui.qml</file>
         <file>qml/EncryptKey.qml</file>
         <file>qml/DecryptKey.qml</file>
+        <file>qml/Payment.qml</file>
+        <file>qml/PaymentForm.ui.qml</file>
     </qresource>
 </RCC>

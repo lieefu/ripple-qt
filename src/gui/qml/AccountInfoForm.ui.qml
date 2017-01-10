@@ -3,6 +3,7 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 
 Item {
+    property alias switch_keylock: switch_keylock
     property alias wallet_id: wallet_id
     property string showkeystr: qsTr("wallet key.")
     property string hidekeystr: qsTr("*************")
@@ -56,8 +57,8 @@ Item {
     }
 
     CheckBox {
-        x: 134
-        y: 290
+        x: 27
+        y: 305
         text: checked?qsTr("钱包已加密"):qsTr("钱包未加密")
         enabled: false
         autoExclusive: false
@@ -65,10 +66,20 @@ Item {
     }
 
     CheckBox {
-        x: 243
-        y: 290
-        text: checked?qsTr("秘钥已锁定(支付密码)"):qsTr("秘钥未锁定(支付密码)")
+        x: 139
+        y: 305
+        text: checked?qsTr("私钥密码(支付密码)已设置"):qsTr("私钥密码(支付密码)未设置")
         enabled: false
+        autoExclusive: false
+        checked: app.accountKeyIsLocked
+    }
+    Switch {
+        id: switch_keylock
+        x: 338
+        y: 305
+        visible: app.accountKeyIsLocked
+        text: checked?qsTr("私钥(支付密码)已锁定"):qsTr("私钥密码(支付密码)已解锁")
+        enabled: true
         autoExclusive: false
         checked: account.lock
     }

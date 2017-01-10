@@ -105,10 +105,15 @@ bool Wallet::setKeyPass(const std::string &password){
     this->isLocked=account_jsondata["lock"]=true;
     account_jsondata["key"]=cute::aesEncrypt(password,keyText);
     wallet_jsondata["account"]=account_jsondata;
-    return encrypt();
+    if(this->isEncrypted) return encrypt();
+    wallet_filedata=wallet_jsondata.dump();
+    return save();
+
 }
 std::string Wallet::decryptKey(const std::string &password){
-    if(!Wallet::isDecrypted()) return "";
+    if(!this->isDecrypted()){
+        if(!this->decrypt())   return "";
+    }
     return cute::aesDecrypt(password,wallet_jsondata["account"]["key"]);
 }
 
@@ -143,7 +148,6 @@ bool Wallet::setAccount(const std::string &id,const std::string &key,const std::
     json["account"]["name"] = name;
     std::cout<<json.dump(3)<<std::endl;
     return setJsonData(json.dump());
-
 }
 std::string Wallet::getAccount(){
     if(this->isDecrypted()){
