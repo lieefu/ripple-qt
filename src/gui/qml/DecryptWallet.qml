@@ -13,6 +13,10 @@ ApplicationWindow {
         pass_label{
             text:"钱包密码:"
         }
+        btn_cancel.onClicked: {
+            close();
+        }
+
         btn_return.onClicked: {
             var passtext=input_pass.text;
             if(app.decryptWallet(passtext)){
@@ -21,8 +25,7 @@ ApplicationWindow {
                 window.close();
                 return;
             }
-            prompt_info.text="钱包解密失败";
-
+            prompt_info.text="密码错误，钱包解密失败";
         }
     }
 }

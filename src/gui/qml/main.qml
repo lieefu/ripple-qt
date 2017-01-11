@@ -9,10 +9,11 @@ ApplicationWindow {
     property bool keylocked: app.accountKeyIsLocked
     property string keyshowstr: qsTr("key locked")
     property string keyhidestr: qsTr("*********")
+    property var keypassDialogCallback;
     visible: true
     width: 640
     height: 480
-    title: qsTr("Hello World")
+    title: qsTr("Ripple-Qt")
     flags: Qt.Dialog
     header:RowLayout {
         width: childrenRect.width
@@ -72,13 +73,14 @@ ApplicationWindow {
         AccountInfo {
             id: accountpage
             switch_showkey.onCheckedChanged: {
-                if(!switch_showkey.checked) return;
-                if(account.lock){
-                   keypassDialog.open();
-                   switch_showkey.checked=false;//if cancel keypassDialog,checked restore false
-                   return;
-                }else{
-                    keyshowstr=account.key;
+                if(switch_showkey.checked){
+                    if(account.lock){
+                        keypassDialog.open();
+                        keypassDialogCallback=function(ok){
+                           console.log("showkey call",ok);
+                           if(!ok) switch_showkey.checked=false;
+                        }
+                    }
                 }
             }
             switch_keylock.onCheckedChanged: {
@@ -88,8 +90,7 @@ ApplicationWindow {
                 }else{
                     if(account.lock){
                         keypassDialog.open();
-                    }else{
-                        keyshowstr=account.key;
+                        keypassDialogCallback=null;
                     }
                 }
             }
@@ -99,22 +100,23 @@ ApplicationWindow {
                 if(account.lock){
                     console.log("秘钥锁定，请解锁");
                     keypassDialog.open();
+                    keypassDialogCallback=null;
                     return;
                 }
                 var payment={
-                "Account": "sender address",
-                "Amount": "100000000",
-                "Destination": "recever address",
-                "TransactionType": "Payment",
-                "Sequence":12,
-                "Fee":10000
+                    "Account": "sender address",
+                    "Amount": "100000000",
+                    "Destination": "recever address",
+                    "TransactionType": "Payment",
+                    "Sequence":176,
+                    "Fee":10000
                 };
                 console.log("秘钥：",account.key);
                 console.log(reciver_address.text,xrp_amount.text);
-                payment.Account = account.id;
+                payment.Account = "r4ct9csCtZC2ycncUWdna5RW5XUhSWmJ5Z";//account.id;
                 payment.Destination = reciver_address.text;
                 payment.Amount = xrp_amount.text;
-                payment.Sequence = 1;
+                payment.Sequence = 176;
                 var tx_json_str=JSON.stringify(payment);
                 console.log(tx_json_str);
                 var signjson_str= app.sign(tx_json_str,account.key);
@@ -160,13 +162,17 @@ ApplicationWindow {
             pass_label{
                 text:"私钥密码:"
             }
+            btn_cancel.onClicked: {
+                keypassDialog.click(StandardButton.Cancel);
+            }
             btn_return.onClicked: {
                 var passtext=input_pass.text;
                 input_pass.text="";
                 var keystr=app.decryptKey(passtext);
                 if(keystr===""){
-                    prompt_info.text="密码错误，私钥解密失败！";
+                    prompt_info.text="密码错误，私钥解锁失败！";
                     accountpage.switch_keylock.checked=true;
+                    if(keypassDialogCallback) keypassDialogCallback(false);
                     return;
                 }
                 prompt_info.text="私钥解密成功";
@@ -174,7 +180,14 @@ ApplicationWindow {
                 keylocked=account.lock = false
                 account.key=keystr;
                 keyshowstr=account.key;
+                if(keypassDialogCallback) keypassDialogCallback(true);
             }
+        }
+        onRejected: {
+            //click red 'X' close dialog,no signal rejected emit
+            //http://stackoverflow.com/questions/41509003/how-to-get-dialog-red-x-close-button-signal-in-qml
+            console.log("on rejected");
+            if(keypassDialogCallback) keypassDialogCallback(false);
         }
     }
 }
