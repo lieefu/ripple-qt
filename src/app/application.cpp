@@ -17,6 +17,9 @@ void Application::init(){
     cute::wallet->open();
     cute::gui = std::make_unique<Gui>();
     cute::gui->init();
+    //ripple::submit1({"server_info"});
+    ripple::init();
+    //ripple::apicmd({"account_info","rXzxK7wpKLZ99qwXNiy5nFQUhYxFZq3Rd"});
 }
 void Application::close(){
     closeSystrayIcon();

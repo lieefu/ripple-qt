@@ -66,6 +66,7 @@ Q_INVOKABLE bool decryptWallet(const QString pass);
 Q_INVOKABLE bool encryptKey(const QString pass);
 Q_INVOKABLE const QString decryptKey(const QString pass);
 Q_INVOKABLE const QString sign(const QString tx_json_str,const QString key);
+Q_INVOKABLE const QString ripplecmd(const QString &cmdstr);
     void init();
     void hideMainWin();
     bool mainWinIsVisible();

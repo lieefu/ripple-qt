@@ -4,16 +4,48 @@
 #include <ripple/protocol/AccountID.h>
 #include <ripple/protocol/JsonFields.h>
 
-
 #include <ripple/json/json_reader.h>
 #include <ripple/protocol/STParsedJSON.h>
 #include <ripple/protocol/STTx.h>
 #include <ripple/basics/StringUtilities.h>
+
+#include <BeastConfig.h>
+#include <ripple/basics/Log.h>
+#include <ripple/core/Config.h>
+#include <ripple/core/ConfigSections.h>
+
+
+#include <ripple/net/RPCCall.h>
+#include <ripple/protocol/ErrorCodes.h>
 #include "ripple.h"
 namespace ripple {
 ripple::KeyType keyType = ripple::KeyType::secp256k1;
+using namespace beast::severities;
+Severity thresh = kFatal;//kInfo;
+auto logs = std::make_unique<Logs>(thresh);
+auto config = std::make_unique<Config>();
+auto configFile = std::string();
+bool init(){
+    config->setup (configFile, true,true,true);
+    config->rpc_ip = boost::asio::ip::address_v4::from_string("174.37.225.41");
+    config->rpc_port = 51234;
+}
+
 boost::optional<std::string> getAccountFromSeed(ripple::Seed const &seed);
-boost::optional<std::string> createAccount(){
+boost::optional<std::string> apicmd(const std::vector<std::string>& vCmd){
+    for(std::string s:vCmd)
+        std::cout<<s<<std::endl;
+
+    auto const result = rpcClient(vCmd, *config, *logs);
+
+    if (result.first != rpcBAD_SYNTAX){
+        std::cout << result.second.toStyledString ()<<std::endl;
+        return result.second.toStyledString ();
+    }
+    return boost::none;
+}
+
+boost::optional<std::string> createAccount(){    
     ripple::Seed seed = ripple::randomSeed ();
     return getAccountFromSeed(seed);
 }

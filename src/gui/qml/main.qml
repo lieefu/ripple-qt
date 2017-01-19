@@ -151,6 +151,8 @@ ApplicationWindow {
         }
 
         console.log(account["id"]);
+        var accountinfo=app.ripplecmd("account_info "+account["id"]);
+        console.log(accountinfo);
     }
     Dialog {
         id: keypassDialog

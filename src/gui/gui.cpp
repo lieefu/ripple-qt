@@ -154,3 +154,15 @@ const QString Gui::sign(const QString tx_json_str, const QString key){
     if(sign_data==boost::none) return "";
     return QString::fromStdString(*sign_data);
 }
+const QString Gui::ripplecmd(const QString &cmdstr){
+    std::vector<std::string> vcmd;
+    QStringList cmdlist=cmdstr.split(' ');
+    for(QString s:cmdlist){
+        vcmd.push_back(s.toStdString());
+    }
+    auto ret = ripple::apicmd(vcmd);
+    if(ret){
+        return QString::fromStdString(*ret);
+    }
+    return "";
+}
