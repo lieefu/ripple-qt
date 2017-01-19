@@ -14,11 +14,12 @@ Application::Application(){
 }
 
 void Application::init(){
+    ripple::init();//需要在cute::gui->init();前执行，防止未初始化就调用rippleapi
     cute::wallet->open();
     cute::gui = std::make_unique<Gui>();
     cute::gui->init();
     //ripple::submit1({"server_info"});
-    ripple::init();
+
     //ripple::apicmd({"account_info","rXzxK7wpKLZ99qwXNiy5nFQUhYxFZq3Rd"});
 }
 void Application::close(){

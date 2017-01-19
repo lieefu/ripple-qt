@@ -2,14 +2,12 @@ import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Dialogs 1.2
-
+import "../js/JsUtil.js" as JsUtil
 ApplicationWindow {
     id: window
-    property var account
-    property bool keylocked: app.accountKeyIsLocked
-    property string keyshowstr: qsTr("key locked")
-    property string keyhidestr: qsTr("*********")
+    property Account account: Account{}
     property var keypassDialogCallback;
+
     visible: true
     width: 640
     height: 480
@@ -85,8 +83,8 @@ ApplicationWindow {
             }
             switch_keylock.onCheckedChanged: {
                 if(switch_keylock.checked){
-                    keylocked=account.lock = true;
-                    keyshowstr="key locked";
+                    account.lock = true;
+                    account.keyshowstr="key locked";
                 }else{
                     if(account.lock){
                         keypassDialog.open();
@@ -121,6 +119,18 @@ ApplicationWindow {
                 console.log(tx_json_str);
                 var signjson_str= app.sign(tx_json_str,account.key);
                 console.log(signjson_str);
+                var signjson = JSON.parse(signjson_str);
+                console.log(signjson.tx_blob);
+                var retstr = app.ripplecmd("submit "+signjson.tx_blob);
+                var retjson = JSON.parse(retstr);
+                retjson = retjson.result;
+                if(retjson["engine_result"]==="tesSUCCESS"){
+                    prompt_info.text = "payment success";
+                }else{
+                    prompt_info.text = retjson["engine_result_message"];
+                }
+
+                console.log(retstr);
             }
         }
     }
@@ -142,18 +152,35 @@ ApplicationWindow {
     }
     function setAccount(accountstr){
         console.log("Response text: " + accountstr);
-        account=JSON.parse(accountstr);
-        accountpage.wallet_id.text=account["id"];
-        if(account["lock"]){
-            keyshowstr="is locked";
+        var accountJson=JSON.parse(accountstr);
+        account.id=accountJson["id"];
+        account.key=accountJson["key"]
+        account.lock = accountJson["lock"];
+        if(account.lock){
+            console.log("私钥密码已经设置");
+            account.keyshowstr="is locked";
         }else{
-            keyshowstr=account["key"];
+            account.keyshowstr=account["key"];
         }
-
-        console.log(account["id"]);
-        var accountinfo=app.ripplecmd("account_info "+account["id"]);
-        console.log(accountinfo);
+        console.log(account.id);
+        getAccountInfo("rXzxK7wpKLZ99qwXNiy5nFQUhYxFZq3Rd");
+        //getAccountInfo(account.id);
     }
+    function getAccountInfo(id){
+        var accountinfostr=app.ripplecmd("account_info "+id);
+        console.log(accountinfostr);
+        var accountinfo = JSON.parse(accountinfostr);
+        accountinfo  = accountinfo.result;
+        if(accountinfo.account_data){
+            accountinfo = accountinfo.account_data;
+            account.balance = JsUtil.droptoxrp_comma(accountinfo.Balance);
+            account.sequence = accountinfo.Sequence;
+        }else{
+            account.balance = accountinfo.error_message;
+            account.sequence = "0";
+        }
+    }
+
     Dialog {
         id: keypassDialog
         width: 500
@@ -178,10 +205,11 @@ ApplicationWindow {
                     return;
                 }
                 prompt_info.text="私钥解密成功";
+                console.log("私钥解密成功");
                 keypassDialog.click(StandardButton.Ok);
-                keylocked=account.lock = false
+                account.lock = false
                 account.key=keystr;
-                keyshowstr=account.key;
+                account.keyshowstr=account.key;
                 if(keypassDialogCallback) keypassDialogCallback(true);
             }
         }

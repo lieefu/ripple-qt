@@ -1,7 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>qml/main.qml</file>
-        <file>qml/AccountInfo.qml</file>
+        <file>qml/Account.qml</file>
         <file>qml/AccountInfoForm.ui.qml</file>
         <file>qml/About.qml</file>
         <file>qml/AboutForm.ui.qml</file>
@@ -16,5 +16,7 @@
         <file>qml/DecryptKey.qml</file>
         <file>qml/Payment.qml</file>
         <file>qml/PaymentForm.ui.qml</file>
+        <file>qml/AccountInfo.qml</file>
+        <file>js/JsUtil.js</file>
     </qresource>
 </RCC>

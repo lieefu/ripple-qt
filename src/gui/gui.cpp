@@ -160,9 +160,12 @@ const QString Gui::ripplecmd(const QString &cmdstr){
     for(QString s:cmdlist){
         vcmd.push_back(s.toStdString());
     }
+    qDebug()<<cmdstr;
     auto ret = ripple::apicmd(vcmd);
-    if(ret){
-        return QString::fromStdString(*ret);
-    }
-    return "";
+    if(ret==boost::none){
+        qDebug()<<cmdstr;
+        return "";
+    }    
+    return QString::fromStdString(*ret);
+
 }
