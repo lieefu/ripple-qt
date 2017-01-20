@@ -75,8 +75,8 @@ ApplicationWindow {
                     if(account.lock){
                         keypassDialog.open();
                         keypassDialogCallback=function(ok){
-                           console.log("showkey call",ok);
-                           if(!ok) switch_showkey.checked=false;
+                            console.log("showkey call",ok);
+                            if(!ok) switch_showkey.checked=false;
                         }
                     }
                 }
@@ -116,11 +116,8 @@ ApplicationWindow {
                 payment.Amount = xrp_amount.text;
                 payment.Sequence = 176;
                 var tx_json_str=JSON.stringify(payment);
-                console.log(tx_json_str);
                 var signjson_str= app.sign(tx_json_str,account.key);
-                console.log(signjson_str);
                 var signjson = JSON.parse(signjson_str);
-                console.log(signjson.tx_blob);
                 var retstr = app.ripplecmd("submit "+signjson.tx_blob);
                 var retjson = JSON.parse(retstr);
                 retjson = retjson.result;
@@ -129,8 +126,6 @@ ApplicationWindow {
                 }else{
                     prompt_info.text = retjson["engine_result_message"];
                 }
-
-                console.log(retstr);
             }
         }
     }
@@ -138,12 +133,8 @@ ApplicationWindow {
     footer: TabBar {
         id: tabBar
         currentIndex: swipeView.currentIndex
-        TabButton {
-            text: qsTr("AccountInfo")
-        }
-        TabButton {
-            text: qsTr("Payment")
-        }
+        TabButton {text: qsTr("AccountInfo")}
+        TabButton {text: qsTr("Payment")}
     }
     onClosing:{
         console.log("main windows is closing");
@@ -163,8 +154,11 @@ ApplicationWindow {
             account.keyshowstr=account["key"];
         }
         console.log(account.id);
-        getAccountInfo("rXzxK7wpKLZ99qwXNiy5nFQUhYxFZq3Rd");
+        getAccountInfo("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF");
         //getAccountInfo(account.id);
+        getAccountlines("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF")
+        getAccountlines("rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y")
+
     }
     function getAccountInfo(id){
         var accountinfostr=app.ripplecmd("account_info "+id);
@@ -180,7 +174,28 @@ ApplicationWindow {
             account.sequence = "0";
         }
     }
-
+    function getAccountlines(id){
+        var accountlinesstr=app.ripplecmd("account_lines "+id);
+        var accountlines = JSON.parse(accountlinesstr);
+        accountlines  = accountlines.result;
+        while(accountlines.status==="success"){
+            var lines = accountlines.lines;
+            console.log(lines.length);
+            break;
+            var marker = accountlines.marker;
+            if(marker){
+                var ledger_index = accountlines.ledger_current_index;
+                if(accountlines.ledger_index) ledger_index = accountlines.ledger_index;
+                accountlinesstr=app.ripplecmd("account_lines "+id+"  "+ledger_index+" 400 "+marker);
+                console.log(accountlinesstr);
+                accountlines = JSON.parse(accountlinesstr);
+                accountlines  = accountlines.result;
+            }else {
+                //console.log(accountlinesstr);
+                break;
+            }
+        }
+    }
     Dialog {
         id: keypassDialog
         width: 500

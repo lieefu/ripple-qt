@@ -21,7 +21,7 @@
 namespace ripple {
 ripple::KeyType keyType = ripple::KeyType::secp256k1;
 using namespace beast::severities;
-Severity thresh = kFatal;//kInfo;
+Severity thresh = kFatal;//kTrace;//kFatal;//kInfo;
 auto logs = std::make_unique<Logs>(thresh);
 auto config = std::make_unique<Config>();
 auto configFile = std::string();
@@ -39,7 +39,7 @@ boost::optional<std::string> apicmd(const std::vector<std::string>& vCmd){
     auto const result = rpcClient(vCmd, *config, *logs);
 
     if (result.first != rpcBAD_SYNTAX){
-        std::cout << result.second.toStyledString ()<<std::endl;
+        //std::cout << result.second.toStyledString ()<<std::endl;
         return result.second.toStyledString ();
     }
     return boost::none;
