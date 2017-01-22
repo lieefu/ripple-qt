@@ -33,6 +33,9 @@ function ascify(code){
 function droptoxrp(num){
     return parseFloat(num)/1000000;
 }
+function xrptodrop(num){
+    return parseFloat(num)*1000000;
+}
 function comma(x) {
     //console.log("x="+x+"parseFloat(x)="+parseFloat(x)+"parseFloat(x).toLocaleString()="+parseFloat(x).toLocaleString());
     return parseFloat(x).toLocaleString();

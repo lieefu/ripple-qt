@@ -56,6 +56,8 @@ public:
     bool walletIsEncrypted();
     bool accountKeyIsLocked();
 Q_INVOKABLE const QString generatorWallet();
+Q_INVOKABLE const QString getWalletFromKey(const QString &key);
+Q_INVOKABLE const QString generatorWalleFromStr(const QString &text);
 Q_INVOKABLE bool saveWallet(const QString id,const QString key,const QString name);
 Q_INVOKABLE void showMainWin();
 Q_INVOKABLE void showEncryptWalletWin();

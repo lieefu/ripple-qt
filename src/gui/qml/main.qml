@@ -103,7 +103,7 @@ ApplicationWindow {
                 }
                 var payment={
                     "Account": "sender address",
-                    "Amount": "100000000",
+                    "Amount": "1",
                     "Destination": "recever address",
                     "TransactionType": "Payment",
                     "Sequence":176,
@@ -111,18 +111,21 @@ ApplicationWindow {
                 };
                 console.log("秘钥：",account.key);
                 console.log(reciver_address.text,xrp_amount.text);
-                payment.Account = "r4ct9csCtZC2ycncUWdna5RW5XUhSWmJ5Z";//account.id;
+                payment.Account = account.id;
                 payment.Destination = reciver_address.text;
-                payment.Amount = xrp_amount.text;
-                payment.Sequence = 176;
+                payment.Amount = JsUtil.xrptodrop(xrp_amount.text);
+                payment.Sequence = account.sequence ;
                 var tx_json_str=JSON.stringify(payment);
                 var signjson_str= app.sign(tx_json_str,account.key);
+                console.log(signjson_str);
                 var signjson = JSON.parse(signjson_str);
                 var retstr = app.ripplecmd("submit "+signjson.tx_blob);
+                console.log(retstr);
                 var retjson = JSON.parse(retstr);
                 retjson = retjson.result;
                 if(retjson["engine_result"]==="tesSUCCESS"){
                     prompt_info.text = "payment success";
+                    getAccountInfo(account.id);
                 }else{
                     prompt_info.text = retjson["engine_result_message"];
                 }
@@ -154,10 +157,10 @@ ApplicationWindow {
             account.keyshowstr=account["key"];
         }
         console.log(account.id);
-        getAccountInfo("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF");
-        //getAccountInfo(account.id);
-        getAccountlines("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF")
-        getAccountlines("rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y")
+        //getAccountInfo("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF");
+        getAccountInfo(account.id);
+        //getAccountlines("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF")
+        //getAccountlines("rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y")//不打算支持网关钱包地址
 
     }
     function getAccountInfo(id){
@@ -166,9 +169,11 @@ ApplicationWindow {
         var accountinfo = JSON.parse(accountinfostr);
         accountinfo  = accountinfo.result;
         if(accountinfo.account_data){
-            accountinfo = accountinfo.account_data;
-            account.balance = JsUtil.droptoxrp_comma(accountinfo.Balance);
-            account.sequence = accountinfo.Sequence;
+            var account_data = accountinfo.account_data;
+            account.balance = JsUtil.droptoxrp_comma(account_data.Balance);
+            account.sequence = account_data.Sequence;
+            account.freeze = account_data.OwnerCount * 5 + 20;
+            getAccountlines(account.id);
         }else{
             account.balance = accountinfo.error_message;
             account.sequence = "0";
@@ -176,25 +181,43 @@ ApplicationWindow {
     }
     function getAccountlines(id){
         var accountlinesstr=app.ripplecmd("account_lines "+id);
+        console.log(accountlinesstr);
         var accountlines = JSON.parse(accountlinesstr);
         accountlines  = accountlines.result;
-        while(accountlines.status==="success"){
-            var lines = accountlines.lines;
-            console.log(lines.length);
-            break;
-            var marker = accountlines.marker;
-            if(marker){
-                var ledger_index = accountlines.ledger_current_index;
-                if(accountlines.ledger_index) ledger_index = accountlines.ledger_index;
-                accountlinesstr=app.ripplecmd("account_lines "+id+"  "+ledger_index+" 400 "+marker);
-                console.log(accountlinesstr);
-                accountlines = JSON.parse(accountlinesstr);
-                accountlines  = accountlines.result;
-            }else {
-                //console.log(accountlinesstr);
-                break;
+        var lines = accountlines.lines;
+        for(var i=0;i<lines.length; ++i){
+            var balance = lines[i].balance
+            if(balance === "0") continue;
+            var currency = lines[i].currency
+            if(currency.length>3){
+                if(currency==="0158415500000000C1F76FF6ECB0BAC600000000") crurrency="XAU";
             }
+            account.currencyModel.append({
+                                             currency: currency,
+                                             issuer: lines[i].account,
+                                             balance:balance,
+                                             limit:lines[i].limit,
+                                             no_ripple: lines[i].no_ripple
+                                         });
         }
+
+
+        //        while(accountlines.status==="success"){//网关地址是发行货币，余额是负值，有成千上万行lines，不打算支持网关钱包地址
+        //            var lines = accountlines.lines;
+        //            console.log(lines.length);
+        //            var marker = accountlines.marker;
+        //            if(marker){
+        //                var ledger_index = accountlines.ledger_current_index;
+        //                if(accountlines.ledger_index) ledger_index = accountlines.ledger_index;
+        //                accountlinesstr=app.ripplecmd("account_lines "+id+"  "+ledger_index+" 400 "+marker);
+        //                console.log(accountlinesstr);
+        //                accountlines = JSON.parse(accountlinesstr);
+        //                accountlines  = accountlines.result;
+        //            }else {
+        //                //console.log(accountlinesstr);
+        //                break;
+        //            }
+        //        }
     }
     Dialog {
         id: keypassDialog

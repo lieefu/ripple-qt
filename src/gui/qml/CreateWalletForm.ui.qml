@@ -1,39 +1,48 @@
 import QtQuick 2.7
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
+
 Item {
     property alias btn_save: btn_save
     property alias btn_generator: btn_generator
     property alias wallet_id: wallet_id
     property alias wallet_key: wallet_key
-    property alias textField1: textField1
-    property alias button1: button1
     property string showkey: qsTr("wallet key.")
     property string hidekey: qsTr("wallet key")
     property bool generateWallet: false
-    RowLayout {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 20
-        anchors.top: parent.top
+    property alias btn_key: btn_key
+    property alias textField: textField
+    property alias btn_text: btn_text
+    property alias prompt_info: prompt_info
 
         TextField {
-            id: textField1
+            id: textField
+            x: 59
+            y: 20
+            width: 300
             placeholderText: qsTr("Text Field")
-            echoMode: TextInput.Password
             selectByMouse: true
         }
-
         Button {
-            id: button1
-            text: qsTr("Press Me")
+            id: btn_key
+            x: 375
+            y: 20
+            text: qsTr("私钥导入")
         }
-    }
+        Button {
+            id: btn_text
+            x: 486
+            y: 20
+            text: qsTr("文本生成(脑钱包)")
+        }
 
     Button {
         id: btn_generator
-        x: 486
-        y: 86
-        text: qsTr("钱包生成器")
+        x: 110
+        y: 66
+        width: 420
+        height: 40
+        text: qsTr("钱包随机生成器")
     }
 
     Label {
@@ -80,9 +89,16 @@ Item {
 
     Button {
         id: btn_save
-        x: 92
-        y: 251
+        x: 430
+        y: 239
         text: qsTr("保存到钱包文件")
         enabled: !app.existWallet && generateWallet
+    }
+
+    Label {
+        id: prompt_info
+        x: 92
+        y: 222
+        text: qsTr("提示信息")
     }
 }

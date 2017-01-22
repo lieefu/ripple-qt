@@ -114,6 +114,17 @@ const QString Gui::generatorWallet(){
     qDebug()<<"button generator click!";
     return QString::fromStdString(ripple::createAccount().get());
 }
+const QString Gui::getWalletFromKey(const QString &key){
+    auto wallet=ripple::getAccountFromKey(key.toStdString());
+    if(wallet){
+        return QString::fromStdString(wallet.get());
+    }
+    return "";
+}
+const QString Gui::generatorWalleFromStr(const QString &text){
+    return QString::fromStdString(ripple::createAccountFromStr(text.toStdString()).get());
+}
+
 bool Gui::existWallet(){
     qDebug()<<"存在钱包："<< cute::wallet->isOK();
     return cute::wallet->isOK();

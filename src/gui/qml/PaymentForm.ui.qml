@@ -35,7 +35,7 @@ Item {
         id: xrp_amount
         x: 124
         y: 165
-        text: qsTr("100000")
+        text: qsTr("1")
     }
 
     Label {
