@@ -23,7 +23,11 @@ Item {
         x: 163
         y: 67
     }
-
+    TextField {
+        id: input_pass2
+        x: 163
+        y: 112
+    }
     Button {
         id: btn_return
         x: 384
@@ -38,11 +42,7 @@ Item {
         text: qsTr("再次输入密码：")
     }
 
-    TextField {
-        id: input_pass2
-        x: 163
-        y: 112
-    }
+
 
     Label {
         id: prompt_info
