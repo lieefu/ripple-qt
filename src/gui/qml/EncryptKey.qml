@@ -9,7 +9,7 @@ ApplicationWindow {
     height: 250
     title: qsTr("ripple-qt_加密私钥")
     flags: Qt.Dialog
-    SetPasswordForm {
+    SetPassword {
         pass_label{
             text:qsTr("支付密码：")
         }

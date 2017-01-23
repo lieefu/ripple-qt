@@ -9,7 +9,7 @@ ApplicationWindow {
     height: 250
     title: qsTr("ripple-qt_输入钱包密码")
     flags: Qt.Dialog
-    PasswordForm {
+    Password {
         pass_label{
             text:"钱包密码:"
         }

@@ -165,7 +165,7 @@ ApplicationWindow {
             account.keyshowstr=account["key"];
         }
         console.log(account.id);
-        setTimeout(function(){getAccountInfo(account.id)},1000);
+        setTimeout(function(){getAccountInfo(account.id)},10000);
         //getAccountInfo("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF");
         //getAccountInfo(account.id);
         //getAccountlines("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF")
@@ -242,7 +242,9 @@ ApplicationWindow {
         height: 250
         title: qsTr("ripple-qt_输入私钥密码")
         standardButtons: StandardButton.NoButton;
-        PasswordForm {
+        onVisibleChanged: if (visible) password.input_pass.forceActiveFocus();
+        Password {
+            id:password
             pass_label{
                 text:"私钥密码:"
             }

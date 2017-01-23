@@ -20,5 +20,7 @@
         <file>js/JsUtil.js</file>
         <file>qml/Trustline.qml</file>
         <file>qml/TrustlineForm.ui.qml</file>
+        <file>qml/Password.qml</file>
+        <file>qml/SetPassword.qml</file>
     </qresource>
 </RCC>
