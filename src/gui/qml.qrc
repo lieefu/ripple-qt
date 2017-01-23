@@ -18,5 +18,7 @@
         <file>qml/PaymentForm.ui.qml</file>
         <file>qml/AccountInfo.qml</file>
         <file>js/JsUtil.js</file>
+        <file>qml/Trustline.qml</file>
+        <file>qml/TrustlineForm.ui.qml</file>
     </qresource>
 </RCC>

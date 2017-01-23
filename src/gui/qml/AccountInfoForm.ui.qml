@@ -5,12 +5,6 @@ import QtQuick.Layouts 1.0
 Item {
     property alias switch_keylock: switch_keylock
     property alias switch_showkey: switch_showkey
-    RowLayout {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.topMargin: 20
-        anchors.top: parent.top
-    }
-
     Label {
         id: label
         x: 25

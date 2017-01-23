@@ -60,6 +60,10 @@ ApplicationWindow {
                     text: "Payment"
                     onTriggered: tabBar.currentIndex = 1;
                 }
+                MenuItem {
+                    text: "TrustLine"
+                    onTriggered: tabBar.currentIndex = 2;
+                }
             }
 
         }
@@ -131,6 +135,9 @@ ApplicationWindow {
                 }
             }
         }
+        Trustline{
+
+        }
     }
 
     footer: TabBar {
@@ -138,6 +145,7 @@ ApplicationWindow {
         currentIndex: swipeView.currentIndex
         TabButton {text: qsTr("AccountInfo")}
         TabButton {text: qsTr("Payment")}
+        TabButton {text: qsTr("TrustLine")}
     }
     onClosing:{
         console.log("main windows is closing");
@@ -157,11 +165,20 @@ ApplicationWindow {
             account.keyshowstr=account["key"];
         }
         console.log(account.id);
+        setTimeout(function(){getAccountInfo(account.id)},1000);
         //getAccountInfo("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF");
-        getAccountInfo(account.id);
+        //getAccountInfo(account.id);
         //getAccountlines("rnTYGCErsTL8QSByDM8WVMVuhF6iqyYZYF")
         //getAccountlines("rKiCet8SdvWxPXnAgYarFUXMh1zCPz432Y")//不打算支持网关钱包地址
 
+    }
+    Timer {id: timer}
+    function setTimeout(cb,delayTime) {
+        //timer = new Timer();
+        timer.interval = delayTime;
+        timer.repeat = false;
+        timer.triggered.connect(cb);
+        timer.start();
     }
     function getAccountInfo(id){
         var accountinfostr=app.ripplecmd("account_info "+id);

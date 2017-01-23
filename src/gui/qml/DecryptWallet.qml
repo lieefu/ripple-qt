@@ -21,8 +21,8 @@ ApplicationWindow {
             var passtext=input_pass.text;
             if(app.decryptWallet(passtext)){
                 prompt_info.text="钱包解密成功";
-                app.showMainWin();
                 window.close();
+                app.showMainWin();                
                 return;
             }
             prompt_info.text="密码错误，钱包解密失败";
