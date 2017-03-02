@@ -14,7 +14,7 @@ ApplicationWindow {
     title: qsTr("Ripple-Qt")
     flags: Qt.Dialog
     header:RowLayout {
-        width: childrenRect.width
+        //width: childrenRect.width
         ToolButton{
             text: qsTr("Wallet")
             onClicked: menu.open();

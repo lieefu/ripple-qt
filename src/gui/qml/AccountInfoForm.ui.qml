@@ -108,7 +108,7 @@ Item {
         id: listView
         x: 22
         y: 144
-        width: rowhead.width
+        width: childrenRect.width
         height: 180
         flickableDirection: Flickable.VerticalFlick
         model: account.currencyModel;

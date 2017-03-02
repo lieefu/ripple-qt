@@ -81,7 +81,8 @@ Q_INVOKABLE const QString ripplecmd(const QString &cmdstr);
     QWindow* decryptKeyWin{nullptr};
     QWindow* aboutWin{nullptr};
 private:
-    QQmlApplicationEngine *engine;
+    //QQmlApplicationEngine *engine;
+    std::unique_ptr<QQmlApplicationEngine> engine;
     QString versioninformation=QObject::tr("Ripple-qt 1.0.0");
     //所有使用本软件全部或者部分代码的程序设计人员请保留lience信息，并在所发布的软件关于窗口中进行显示。
     QString licenceinformation=QObject::tr("<h2>%1</h2>"

@@ -26,20 +26,23 @@ auto logs = std::make_unique<Logs>(thresh);
 auto config = std::make_unique<Config>();
 auto configFile = std::string();
 bool init(){
+    std::cout<<"ripple init"<<std::endl;
     config->setup (configFile, true,true,true);
     config->rpc_ip = boost::asio::ip::address_v4::from_string("174.37.225.41");
     config->rpc_port = 51234;
 }
 
 boost::optional<std::string> getAccountFromSeed(ripple::Seed const &seed);
+
 boost::optional<std::string> apicmd(const std::vector<std::string>& vCmd){
+    std::cout<<"ripple apicmd"<<std::endl;
     for(std::string s:vCmd)
         std::cout<<s<<std::endl;
 
     auto const result = rpcClient(vCmd, *config, *logs);
 
     if (result.first != rpcBAD_SYNTAX){
-        //std::cout << result.second.toStyledString ()<<std::endl;
+        std::cout << result.second.toStyledString ()<<std::endl;
         return result.second.toStyledString ();
     }
     return boost::none;

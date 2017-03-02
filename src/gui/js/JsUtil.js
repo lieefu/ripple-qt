@@ -74,20 +74,20 @@ function account2name(account){
     }
 }
 var ripplenameMap={};
-function initripplenameMap(){
-    if(window.localStorage){
-        if(localStorage.ripplenameMap){
-            ripplenameMap=JSON.parse(localStorage.ripplenameMap);
-        }
-    }
-}
-initripplenameMap();
-function saveripplenameMap(account,name){
-    if(account) ripplenameMap[account]=name;
-    if(window.localStorage){
-        localStorage.ripplenameMap=JSON.stringify(ripplenameMap);
-    }
-}
+//function initripplenameMap(){
+//    if(window.localStorage){
+//        if(localStorage.ripplenameMap){
+//            ripplenameMap=JSON.parse(localStorage.ripplenameMap);
+//        }
+//    }
+//}
+//initripplenameMap();
+//function saveripplenameMap(account,name){
+//    if(account) ripplenameMap[account]=name;
+//    if(window.localStorage){
+//        localStorage.ripplenameMap=JSON.stringify(ripplenameMap);
+//    }
+//}
 function toAmount(amount,meta) {
     var amt = {value: 0, currency: '', issuer: ''};
     if(amount.currency) {

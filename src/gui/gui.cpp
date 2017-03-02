@@ -26,10 +26,11 @@ std::unique_ptr<Gui> cute::gui;
 Gui::Gui(QObject *parent) : QObject(parent){
 }
 void Gui::init(){
-    //engine = std::make_unique<QQmlApplicationEngine>();
-    engine = new QQmlApplicationEngine();//Qt 的类对象具有自动释放资源能力，只能new使用，而且无需delete，不能使用std::unique_ptr机制
+    engine = std::make_unique<QQmlApplicationEngine>();//Qt5.8后，这句又可以了，不用反而在退出时出现大量异常信息，*** Error in `./ripple-qt': double free or corruption (out): 0x0000000004d40da0 ***
+    //engine = new QQmlApplicationEngine();//Qt 的类对象具有自动释放资源能力，只能new使用，而且无需delete，不能使用std::unique_ptr机制
     engine->rootContext()->setContextProperty("app", this);
     if(!this->existWallet()){
+        qDebug()<<"init show create wallet qml";
         engine->load(QUrl(QStringLiteral("qrc:/qml/CreateWallet.qml")));
         createWalletWin = qobject_cast<QWindow*>(engine->rootObjects().last());
         createWalletWin->setIcon(QIcon(":/img/logo.png"));
